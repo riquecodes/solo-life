@@ -13,6 +13,10 @@ public class User : Entity
     public int CurrentXp { get; set; }
     public int CurrentStreak { get; set; }
 
+    // Refresh token (sessão única por usuário) — armazenamos apenas o hash, nunca o valor bruto.
+    public string? RefreshTokenHash { get; set; }
+    public DateTime? RefreshTokenExpiresAt { get; set; }
+
     public Avatar? Avatar { get; set; }
     public ICollection<Mission> Missions { get; set; } = new List<Mission>();
     public ICollection<Achievement> Achievements { get; set; } = new List<Achievement>();

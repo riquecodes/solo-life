@@ -16,6 +16,9 @@ public class UserRepository : IUserRepository
     public Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
         => _context.Users.FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
 
+    public Task<User?> GetByRefreshTokenHashAsync(string refreshTokenHash, CancellationToken cancellationToken = default)
+        => _context.Users.FirstOrDefaultAsync(u => u.RefreshTokenHash == refreshTokenHash, cancellationToken);
+
     public async Task AddAsync(User user, CancellationToken cancellationToken = default)
         => await _context.Users.AddAsync(user, cancellationToken);
 
