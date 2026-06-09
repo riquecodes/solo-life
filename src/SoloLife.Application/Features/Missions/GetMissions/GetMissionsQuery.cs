@@ -1,6 +1,7 @@
 namespace SoloLife.Application.Features.Missions.GetMissions;
 
 using MediatR;
+using SoloLife.Application.Common.Interfaces;
 using SoloLife.Application.Common.Results;
 using SoloLife.Application.Features.Missions.Dtos;
 
@@ -10,6 +11,15 @@ public record GetMissionsQuery(Guid UserId)
 public class GetMissionsQueryHandler
     : IRequestHandler<GetMissionsQuery, Result<IReadOnlyList<MissionDto>>>
 {
-    public Task<Result<IReadOnlyList<MissionDto>>> Handle(GetMissionsQuery request, CancellationToken cancellationToken)
-        => Task.FromResult(Result.Failure<IReadOnlyList<MissionDto>>("Não implementado."));
+    private readonly IMissionRepository _missions;
+
+    public GetMissionsQueryHandler(IMissionRepository missions)
+        => _missions = missions;
+
+    public async Task<Result<IReadOnlyList<MissionDto>>> Handle(GetMissionsQuery request, CancellationToken cancellationToken)
+    {
+        var missions = await _missions.GetByUserAsync(request.UserId, cancellationToken);
+        IReadOnlyList<MissionDto> dtos = missions.Select(MissionDto.From).ToList();
+        return Result.Success(dtos);
+    }
 }
