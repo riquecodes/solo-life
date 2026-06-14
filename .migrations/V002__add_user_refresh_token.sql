@@ -3,11 +3,13 @@
 
 BEGIN;
 
-ALTER TABLE "Users"
-    ADD COLUMN "RefreshTokenHash"      text         NULL,
-    ADD COLUMN "RefreshTokenExpiresAt" timestamptz  NULL;
+SET search_path TO sololife;
+
+ALTER TABLE users
+    ADD COLUMN refresh_token_hash       text         NULL,
+    ADD COLUMN refresh_token_expires_at timestamptz  NULL;
 
 -- Lookup por hash no fluxo de refresh.
-CREATE INDEX "IX_Users_RefreshTokenHash" ON "Users" ("RefreshTokenHash");
+CREATE INDEX ix_users_refresh_token_hash ON users (refresh_token_hash);
 
 COMMIT;

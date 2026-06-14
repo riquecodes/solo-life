@@ -3,7 +3,9 @@
 
 BEGIN;
 
-ALTER TABLE "Users"
-    ADD COLUMN "LastActivityDate" date NULL;
+SET search_path TO sololife;
+
+ALTER TABLE users
+    ADD COLUMN last_activity_date date NULL;
 
 COMMIT;

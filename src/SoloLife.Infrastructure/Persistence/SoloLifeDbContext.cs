@@ -18,6 +18,9 @@ public class SoloLifeDbContext : DbContext, IUnitOfWork
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Todas as tabelas vivem no schema "sololife" (não em public).
+        modelBuilder.HasDefaultSchema("sololife");
+
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(SoloLifeDbContext).Assembly);
 
         // Id gerado pelo banco (default uuidv7()): o EF omite a coluna no INSERT e lê o valor de volta via RETURNING.

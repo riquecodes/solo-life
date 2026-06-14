@@ -31,7 +31,7 @@ EF Core is used for **runtime mapping only — there are no EF migrations**. Sch
 psql "Host=localhost;Port=5432;Database=sololife;Username=postgres;Password=postgres" -f .migrations/V001__initial_schema.sql
 ```
 
-New migrations: `V{NNN}__{descricao}.sql`, sequential zero-padded 3 digits, each wrapped in `BEGIN; ... COMMIT;`. **All identifiers must be `"PascalCase"` (quoted)** so they match EF Core's by-convention mapping — there are no `IEntityTypeConfiguration` classes, so the table/column names in SQL are the contract with the entity property names. Enums are stored as `integer`; `text[]` for arrays.
+New migrations: `V{NNN}__{descricao}.sql`, sequential zero-padded 3 digits, each wrapped in `BEGIN; ... COMMIT;`. **All identifiers are `snake_case` lowercase (unquoted)** so they match EF Core's mapping via `UseSnakeCaseNamingConvention()` (`EFCore.NamingConventions`, wired in `AddInfrastructure`). Because they are unquoted, PostgreSQL treats names case-insensitively (folds to lowercase) — this avoids `relation "Users" does not exist` errors. All objects live in the `sololife` schema (migrations do `CREATE SCHEMA IF NOT EXISTS sololife; SET search_path TO sololife;`; EF targets it via `modelBuilder.HasDefaultSchema("sololife")`). There are no `IEntityTypeConfiguration` classes, so the table/column names in SQL are the contract with the entity property names (translated to snake_case). Enums are stored as `integer`; `text[]` for arrays.
 
 ## Architecture
 

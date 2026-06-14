@@ -15,7 +15,9 @@ public static class DependencyInjection
         IConfiguration configuration)
     {
         services.AddDbContext<SoloLifeDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("Default")));
+            options
+                .UseNpgsql(configuration.GetConnectionString("Default"))
+                .UseSnakeCaseNamingConvention());
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<SoloLifeDbContext>());
 
