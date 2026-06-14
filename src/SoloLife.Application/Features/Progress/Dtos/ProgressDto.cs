@@ -7,7 +7,7 @@ public record ProgressDto(
     int RemainingXp);
 
 public record ProgressHistoryDto(
-    Guid Id,
-    Guid? MissionId,
+    string Id,
+    string? MissionId,
     int XpGained,
     DateTime CreatedAt);

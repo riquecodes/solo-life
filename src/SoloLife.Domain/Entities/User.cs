@@ -13,6 +13,9 @@ public class User : Entity
     public int CurrentXp { get; set; }
     public int CurrentStreak { get; set; }
 
+    // Data (sem hora) da última missão concluída — referência do StreakService para manter/quebrar o streak.
+    public DateOnly? LastActivityDate { get; set; }
+
     // Refresh token (sessão única por usuário) — armazenamos apenas o hash, nunca o valor bruto.
     public string? RefreshTokenHash { get; set; }
     public DateTime? RefreshTokenExpiresAt { get; set; }

@@ -19,7 +19,7 @@ public class GetMissionsQueryHandlerTests
     [Fact]
     public async Task Handle_RetornaMissoesDoUsuarioMapeadas()
     {
-        var userId = Guid.NewGuid();
+        var userId = Guid.NewGuid().ToString();
         var missions = new List<Mission>
         {
             new() { UserId = userId, Title = "A", Category = MissionCategory.Health, XpReward = 10 },
@@ -38,7 +38,7 @@ public class GetMissionsQueryHandlerTests
     [Fact]
     public async Task Handle_QuandoSemMissoes_RetornaListaVazia()
     {
-        var userId = Guid.NewGuid();
+        var userId = Guid.NewGuid().ToString();
         _missions.GetByUserAsync(userId, Arg.Any<CancellationToken>()).Returns(new List<Mission>());
 
         var result = await _sut.Handle(new GetMissionsQuery(userId), default);

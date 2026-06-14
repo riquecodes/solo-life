@@ -5,7 +5,7 @@
 BEGIN;
 
 CREATE TABLE "Users" (
-    "Id"            uuid         NOT NULL DEFAULT gen_random_uuid(),
+    "Id"            varchar(50)  NOT NULL DEFAULT (uuidv7())::text,
     "Name"          text         NOT NULL,
     "Email"         text         NOT NULL,
     "PasswordHash"  text         NOT NULL,
@@ -20,8 +20,8 @@ CREATE TABLE "Users" (
 CREATE UNIQUE INDEX "IX_Users_Email" ON "Users" ("Email");
 
 CREATE TABLE "Missions" (
-    "Id"          uuid         NOT NULL DEFAULT gen_random_uuid(),
-    "UserId"      uuid         NOT NULL,
+    "Id"          varchar(50)  NOT NULL DEFAULT (uuidv7())::text,
+    "UserId"      varchar(50)  NOT NULL,
     "Title"       text         NOT NULL,
     "Description" text         NOT NULL,
     "Category"    integer      NOT NULL,  -- enum MissionCategory: 0=Health 1=Study 2=Productivity 3=PersonalDevelopment
@@ -37,8 +37,8 @@ CREATE TABLE "Missions" (
 CREATE INDEX "IX_Missions_UserId" ON "Missions" ("UserId");
 
 CREATE TABLE "Avatars" (
-    "Id"                uuid    NOT NULL DEFAULT gen_random_uuid(),
-    "UserId"            uuid    NOT NULL,
+    "Id"                varchar(50)  NOT NULL DEFAULT (uuidv7())::text,
+    "UserId"            varchar(50)  NOT NULL,
     "CurrentSkin"       text    NOT NULL,
     "CurrentBackground" text    NOT NULL,
     "Accessories"       text[]  NOT NULL DEFAULT '{}',
@@ -51,8 +51,8 @@ CREATE TABLE "Avatars" (
 CREATE UNIQUE INDEX "IX_Avatars_UserId" ON "Avatars" ("UserId");
 
 CREATE TABLE "Achievements" (
-    "Id"          uuid         NOT NULL DEFAULT gen_random_uuid(),
-    "UserId"      uuid         NOT NULL,
+    "Id"          varchar(50)  NOT NULL DEFAULT (uuidv7())::text,
+    "UserId"      varchar(50)  NOT NULL,
     "Code"        text         NOT NULL,
     "Title"       text         NOT NULL,
     "Description" text         NOT NULL,
@@ -65,8 +65,8 @@ CREATE TABLE "Achievements" (
 CREATE INDEX "IX_Achievements_UserId" ON "Achievements" ("UserId");
 
 CREATE TABLE "LifeGoals" (
-    "Id"       uuid  NOT NULL DEFAULT gen_random_uuid(),
-    "UserId"   uuid  NOT NULL,
+    "Id"       varchar(50)  NOT NULL DEFAULT (uuidv7())::text,
+    "UserId"   varchar(50)  NOT NULL,
     "Name"     text  NOT NULL,
     "Category" text  NOT NULL,
     CONSTRAINT "PK_LifeGoals" PRIMARY KEY ("Id"),
@@ -77,9 +77,9 @@ CREATE TABLE "LifeGoals" (
 CREATE INDEX "IX_LifeGoals_UserId" ON "LifeGoals" ("UserId");
 
 CREATE TABLE "ProgressHistory" (
-    "Id"        uuid         NOT NULL DEFAULT gen_random_uuid(),
-    "UserId"    uuid         NOT NULL,
-    "MissionId" uuid         NULL,
+    "Id"        varchar(50)  NOT NULL DEFAULT (uuidv7())::text,
+    "UserId"    varchar(50)  NOT NULL,
+    "MissionId" varchar(50)  NULL,
     "XpGained"  integer      NOT NULL,
     "CreatedAt" timestamptz  NOT NULL DEFAULT now(),
     CONSTRAINT "PK_ProgressHistory" PRIMARY KEY ("Id"),

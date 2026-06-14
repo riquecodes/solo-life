@@ -10,7 +10,7 @@ public class UserRepository : IUserRepository
 
     public UserRepository(SoloLifeDbContext context) => _context = context;
 
-    public Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public Task<User?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
         => _context.Users.FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
 
     public Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken = default)

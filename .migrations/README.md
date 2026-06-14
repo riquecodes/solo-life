@@ -7,7 +7,7 @@ Migrations SQL manuais (fora da solution). Não usa EF migrations.
 - Nome: `V{NNN}__{descricao}.sql` (ex.: `V002__add_xyz.sql`). Sequencial, zero-pad 3 dígitos.
 - Identificadores em `"PascalCase"` (aspas) — casam com o mapeamento por convenção do EF Core (`SoloLifeDbContext`). Mudar isso exige config EF nas entidades.
 - Cada arquivo envolto em `BEGIN; ... COMMIT;`.
-- Tipos: `uuid`, `timestamptz`, enums como `integer`, arrays nativos (`text[]`).
+- Tipos: chaves como `varchar(50)` com default `(uuidv7())::text` (requer PostgreSQL 18+), `timestamptz`, enums como `integer`, arrays nativos (`text[]`).
 
 ## Aplicar
 

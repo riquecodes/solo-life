@@ -20,7 +20,7 @@ public class CreateMissionCommandHandlerTests
     [Fact]
     public async Task Handle_ComDadosValidos_CriaMissaoPendenteEPersiste()
     {
-        var userId = Guid.NewGuid();
+        var userId = Guid.NewGuid().ToString();
 
         var result = await _sut.Handle(
             new CreateMissionCommand(userId, "  Correr 5km  ", "  Treino matinal  ", MissionCategory.Health, 50),

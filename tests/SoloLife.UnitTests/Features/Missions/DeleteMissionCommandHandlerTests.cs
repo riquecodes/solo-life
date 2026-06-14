@@ -19,9 +19,9 @@ public class DeleteMissionCommandHandlerTests
     [Fact]
     public async Task Handle_QuandoMissaoNaoExiste_RetornaFailureSemRemover()
     {
-        _missions.GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>()).Returns((Mission?)null);
+        _missions.GetByIdAsync(Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns((Mission?)null);
 
-        var result = await _sut.Handle(new DeleteMissionCommand(Guid.NewGuid(), Guid.NewGuid()), default);
+        var result = await _sut.Handle(new DeleteMissionCommand(Guid.NewGuid().ToString(), Guid.NewGuid().ToString()), default);
 
         result.IsFailure.ShouldBeTrue();
         result.Error.ShouldBe("Missão não encontrada.");
@@ -32,10 +32,10 @@ public class DeleteMissionCommandHandlerTests
     [Fact]
     public async Task Handle_QuandoMissaoDeOutroUsuario_RetornaFailureSemRemover()
     {
-        var mission = new Mission { UserId = Guid.NewGuid() };
+        var mission = new Mission { UserId = Guid.NewGuid().ToString() };
         _missions.GetByIdAsync(mission.Id, Arg.Any<CancellationToken>()).Returns(mission);
 
-        var result = await _sut.Handle(new DeleteMissionCommand(mission.Id, Guid.NewGuid()), default);
+        var result = await _sut.Handle(new DeleteMissionCommand(mission.Id, Guid.NewGuid().ToString()), default);
 
         result.IsFailure.ShouldBeTrue();
         result.Error.ShouldBe("Missão não encontrada.");
@@ -46,7 +46,7 @@ public class DeleteMissionCommandHandlerTests
     [Fact]
     public async Task Handle_QuandoDono_RemoveEPersiste()
     {
-        var userId = Guid.NewGuid();
+        var userId = Guid.NewGuid().ToString();
         var mission = new Mission { UserId = userId };
         _missions.GetByIdAsync(mission.Id, Arg.Any<CancellationToken>()).Returns(mission);
 

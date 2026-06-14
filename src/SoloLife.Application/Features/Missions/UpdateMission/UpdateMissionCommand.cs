@@ -7,8 +7,8 @@ using SoloLife.Application.Features.Missions.Dtos;
 using SoloLife.Domain.Enums;
 
 public record UpdateMissionCommand(
-    Guid Id,
-    Guid UserId,
+    string Id,
+    string UserId,
     string Title,
     string Description,
     MissionCategory Category,

@@ -4,7 +4,7 @@ using SoloLife.Domain.Entities;
 using SoloLife.Domain.Enums;
 
 public record MissionDto(
-    Guid Id,
+    string Id,
     string Title,
     string Description,
     MissionCategory Category,

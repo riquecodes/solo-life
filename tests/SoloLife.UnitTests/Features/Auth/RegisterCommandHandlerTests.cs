@@ -56,4 +56,20 @@ public class RegisterCommandHandlerTests
             Arg.Any<CancellationToken>());
         await _unitOfWork.Received(1).SaveChangesAsync(Arg.Any<CancellationToken>());
     }
+
+    [Fact]
+    public async Task Handle_ComDadosValidos_CriaAvatarPadraoParaUsuario()
+    {
+        _users.GetByEmailAsync(Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns((User?)null);
+        _passwordHasher.Hash(Arg.Any<string>()).Returns("HASHED");
+        _tokenGenerator.GenerateRefreshToken()
+            .Returns(new RefreshTokenResult("refresh-bruto", "refresh-hash", DateTime.UtcNow.AddDays(7)));
+        _tokenGenerator.GenerateAccessToken(Arg.Any<User>()).Returns("access-jwt");
+
+        await _sut.Handle(new RegisterCommand("Ana", "ana@test.com", "senha1234"), default);
+
+        // Avatar default criado junto do usuário (via navegação) — EF persiste em cascata.
+        await _users.Received(1).AddAsync(
+            Arg.Is<User>(u => u.Avatar != null), Arg.Any<CancellationToken>());
+    }
 }

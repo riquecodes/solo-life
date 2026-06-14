@@ -5,7 +5,7 @@ using SoloLife.Application.Common.Interfaces;
 using SoloLife.Application.Common.Results;
 using SoloLife.Application.Features.Missions.Dtos;
 
-public record GetMissionsQuery(Guid UserId)
+public record GetMissionsQuery(string UserId)
     : IRequest<Result<IReadOnlyList<MissionDto>>>;
 
 public class GetMissionsQueryHandler

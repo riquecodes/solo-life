@@ -2,6 +2,7 @@ namespace SoloLife.Infrastructure.Persistence;
 
 using Microsoft.EntityFrameworkCore;
 using SoloLife.Application.Common.Interfaces;
+using SoloLife.Domain.Common;
 using SoloLife.Domain.Entities;
 
 public class SoloLifeDbContext : DbContext, IUnitOfWork
@@ -18,6 +19,16 @@ public class SoloLifeDbContext : DbContext, IUnitOfWork
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(SoloLifeDbContext).Assembly);
+
+        // Id gerado pelo banco (default uuidv7()): o EF omite a coluna no INSERT e lê o valor de volta via RETURNING.
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes()
+            .Where(e => typeof(Entity).IsAssignableFrom(e.ClrType)))
+        {
+            modelBuilder.Entity(entityType.ClrType)
+                .Property(nameof(Entity.Id))
+                .HasDefaultValueSql("(uuidv7())::text");
+        }
+
         base.OnModelCreating(modelBuilder);
     }
 }

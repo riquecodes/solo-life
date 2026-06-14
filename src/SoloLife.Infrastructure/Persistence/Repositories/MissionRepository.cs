@@ -3,6 +3,7 @@ namespace SoloLife.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using SoloLife.Application.Common.Interfaces;
 using SoloLife.Domain.Entities;
+using SoloLife.Domain.Enums;
 
 public class MissionRepository : IMissionRepository
 {
@@ -10,11 +11,15 @@ public class MissionRepository : IMissionRepository
 
     public MissionRepository(SoloLifeDbContext context) => _context = context;
 
-    public Task<Mission?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public Task<Mission?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
         => _context.Missions.FirstOrDefaultAsync(m => m.Id == id, cancellationToken);
 
-    public async Task<IReadOnlyList<Mission>> GetByUserAsync(Guid userId, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<Mission>> GetByUserAsync(string userId, CancellationToken cancellationToken = default)
         => await _context.Missions.Where(m => m.UserId == userId).ToListAsync(cancellationToken);
+
+    public Task<int> CountCompletedByUserAsync(string userId, CancellationToken cancellationToken = default)
+        => _context.Missions.CountAsync(
+            m => m.UserId == userId && m.Status == MissionStatus.Completed, cancellationToken);
 
     public async Task AddAsync(Mission mission, CancellationToken cancellationToken = default)
         => await _context.Missions.AddAsync(mission, cancellationToken);

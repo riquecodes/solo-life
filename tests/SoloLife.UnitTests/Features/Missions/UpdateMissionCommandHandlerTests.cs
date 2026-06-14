@@ -20,10 +20,10 @@ public class UpdateMissionCommandHandlerTests
     [Fact]
     public async Task Handle_QuandoMissaoNaoExiste_RetornaFailureSemPersistir()
     {
-        _missions.GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>()).Returns((Mission?)null);
+        _missions.GetByIdAsync(Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns((Mission?)null);
 
         var result = await _sut.Handle(
-            new UpdateMissionCommand(Guid.NewGuid(), Guid.NewGuid(), "T", "D", MissionCategory.Study, 10),
+            new UpdateMissionCommand(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), "T", "D", MissionCategory.Study, 10),
             default);
 
         result.IsFailure.ShouldBeTrue();
@@ -34,11 +34,11 @@ public class UpdateMissionCommandHandlerTests
     [Fact]
     public async Task Handle_QuandoMissaoDeOutroUsuario_RetornaFailureSemPersistir()
     {
-        var mission = new Mission { UserId = Guid.NewGuid() };
+        var mission = new Mission { UserId = Guid.NewGuid().ToString() };
         _missions.GetByIdAsync(mission.Id, Arg.Any<CancellationToken>()).Returns(mission);
 
         var result = await _sut.Handle(
-            new UpdateMissionCommand(mission.Id, Guid.NewGuid(), "T", "D", MissionCategory.Study, 10),
+            new UpdateMissionCommand(mission.Id, Guid.NewGuid().ToString(), "T", "D", MissionCategory.Study, 10),
             default);
 
         result.IsFailure.ShouldBeTrue();
@@ -50,7 +50,7 @@ public class UpdateMissionCommandHandlerTests
     [Fact]
     public async Task Handle_QuandoDono_AtualizaCamposEPersiste()
     {
-        var userId = Guid.NewGuid();
+        var userId = Guid.NewGuid().ToString();
         var mission = new Mission
         {
             UserId = userId,

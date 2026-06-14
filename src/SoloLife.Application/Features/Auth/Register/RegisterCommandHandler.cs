@@ -36,7 +36,14 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Au
         {
             Name = request.Name.Trim(),
             Email = email,
-            PasswordHash = _passwordHasher.Hash(request.Password)
+            PasswordHash = _passwordHasher.Hash(request.Password),
+            // Avatar default criado junto do usuário — o EF persiste em cascata (FK resolvida após o INSERT).
+            Avatar = new Avatar
+            {
+                CurrentSkin = "default",
+                CurrentBackground = "default",
+                Accessories = new List<string>()
+            }
         };
 
         var refresh = _tokenGenerator.GenerateRefreshToken();

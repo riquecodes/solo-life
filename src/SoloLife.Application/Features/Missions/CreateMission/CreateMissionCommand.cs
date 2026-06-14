@@ -8,7 +8,7 @@ using SoloLife.Domain.Entities;
 using SoloLife.Domain.Enums;
 
 public record CreateMissionCommand(
-    Guid UserId,
+    string UserId,
     string Title,
     string Description,
     MissionCategory Category,

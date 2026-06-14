@@ -22,17 +22,17 @@ public class MissionsController : ApiControllerBase
         => ToActionResult(await Sender.Send(new CreateMissionCommand(
             CurrentUserId, request.Title, request.Description, request.Category, request.XpReward)));
 
-    [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update(Guid id, UpdateMissionRequest request)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(string id, UpdateMissionRequest request)
         => ToActionResult(await Sender.Send(new UpdateMissionCommand(
             id, CurrentUserId, request.Title, request.Description, request.Category, request.XpReward)));
 
-    [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Delete(Guid id)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(string id)
         => ToActionResult(await Sender.Send(new DeleteMissionCommand(id, CurrentUserId)));
 
-    [HttpPost("{id:guid}/complete")]
-    public async Task<IActionResult> Complete(Guid id)
+    [HttpPost("{id}/complete")]
+    public async Task<IActionResult> Complete(string id)
         => ToActionResult(await Sender.Send(new CompleteMissionCommand(id, CurrentUserId)));
 }
 

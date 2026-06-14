@@ -4,7 +4,7 @@ using MediatR;
 using SoloLife.Application.Common.Interfaces;
 using SoloLife.Application.Common.Results;
 
-public record DeleteMissionCommand(Guid Id, Guid UserId)
+public record DeleteMissionCommand(string Id, string UserId)
     : IRequest<Result>;
 
 public class DeleteMissionCommandHandler

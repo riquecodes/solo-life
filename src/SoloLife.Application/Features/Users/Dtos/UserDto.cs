@@ -1,7 +1,7 @@
 namespace SoloLife.Application.Features.Users.Dtos;
 
 public record UserDto(
-    Guid Id,
+    string Id,
     string Name,
     string Email,
     int CurrentLevel,

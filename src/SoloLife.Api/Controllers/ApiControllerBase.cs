@@ -13,10 +13,8 @@ public abstract class ApiControllerBase : ControllerBase
     protected ISender Sender => _sender ??= HttpContext.RequestServices.GetRequiredService<ISender>();
 
     /// <summary>Id do usuário autenticado, extraído do token JWT.</summary>
-    protected Guid CurrentUserId =>
-        Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var id)
-            ? id
-            : Guid.Empty;
+    protected string CurrentUserId =>
+        User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
 
     // Camada API é a única a retornar IActionResult (diretriz 9). Mapeia Result<T>.
     protected IActionResult ToActionResult<T>(Result<T> result)
