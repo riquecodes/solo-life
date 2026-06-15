@@ -21,6 +21,8 @@ builder.Services.AddControllers();
 
 // JWT
 var jwt = builder.Configuration.GetSection("Jwt");
+var jwtSecret = jwt["Secret"]
+    ?? throw new InvalidOperationException("Jwt:Secret não configurado.");
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -34,8 +36,7 @@ builder.Services
             ValidateIssuerSigningKey = true,
             ValidIssuer = jwt["Issuer"],
             ValidAudience = jwt["Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(jwt["Secret"] ?? "change-me-super-secret-key-change-me-1234"))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret))
         };
     });
 builder.Services.AddAuthorization();
