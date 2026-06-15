@@ -27,6 +27,7 @@ builder.Services
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
+            NameClaimType = "id",
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = true,

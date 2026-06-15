@@ -36,7 +36,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id),
             // Emitido explicitamente para que ApiControllerBase.CurrentUserId resolva independente do mapeamento de claims.
-            new Claim(ClaimTypes.NameIdentifier, user.Id),
+            new Claim("id", user.Id),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
             new Claim("name", user.Name),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
