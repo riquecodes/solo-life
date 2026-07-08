@@ -8,8 +8,8 @@
 ## Fase 0 — Contas e preparação
 
 - [x] Criar conta na Oracle Cloud (cartão só pra verificação — não cobra no Always Free)
-  - hbriva123 - hbriva123@gmail.com - senha de sempre.
-- [ ] Gerar par de chaves SSH no PC: `ssh-keygen -t ed25519`
+  - Credenciais guardadas fora do repo (gerenciador de senhas). **Nunca** commitar login/senha aqui.
+- [x] Gerar par de chaves SSH no PC: `ssh-keygen -t ed25519`
 - [ ] Ter um domínio com acesso ao painel de DNS (registros A vêm depois, quando souber o IP)
 - [ ] Instalar no PC: cliente SSH + DBeaver (ou pgAdmin/TablePlus)
 - [ ] (Opcional, pode deixar pra Fase 4) Criar bucket S3-compatível pros backups — Cloudflare R2 ou Backblaze B2 (tier grátis)
