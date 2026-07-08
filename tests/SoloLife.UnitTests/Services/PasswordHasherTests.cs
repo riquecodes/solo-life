@@ -34,6 +34,8 @@ public class PasswordHasherTests
     [InlineData("")]
     [InlineData("sem-separador")]
     [InlineData("abc.def")]
+    [InlineData("100000.@@@.@@@")]           // 3 partes, iterations válido, mas base64 inválido
+    [InlineData("100000.YWJj.nao-base64!")]  // salt válido, hash com caractere fora do alfabeto base64
     public void Verify_ComHashMalformado_RetornaFalse(string hash)
     {
         _sut.Verify("qualquer", hash).ShouldBeFalse();

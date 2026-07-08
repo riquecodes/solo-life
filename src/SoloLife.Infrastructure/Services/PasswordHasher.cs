@@ -24,10 +24,18 @@ public class PasswordHasher : IPasswordHasher
         if (parts.Length != 3 || !int.TryParse(parts[0], out var iterations))
             return false;
 
-        var salt = Convert.FromBase64String(parts[1]);
-        var expected = Convert.FromBase64String(parts[2]);
-        var actual = Rfc2898DeriveBytes.Pbkdf2(password, salt, iterations, Algorithm, expected.Length);
+        try
+        {
+            var salt = Convert.FromBase64String(parts[1]);
+            var expected = Convert.FromBase64String(parts[2]);
+            var actual = Rfc2898DeriveBytes.Pbkdf2(password, salt, iterations, Algorithm, expected.Length);
 
-        return CryptographicOperations.FixedTimeEquals(actual, expected);
+            return CryptographicOperations.FixedTimeEquals(actual, expected);
+        }
+        catch (FormatException)
+        {
+            // Hash armazenado corrompido/malformado (base64 inválido) — trata como não-correspondência.
+            return false;
+        }
     }
 }
