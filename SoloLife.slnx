@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/SoloLife.Api/SoloLife.Api.csproj" />
+    <Project Path="src/SoloLife.Application/SoloLife.Application.csproj" />
+    <Project Path="src/SoloLife.Domain/SoloLife.Domain.csproj" />
+    <Project Path="src/SoloLife.Infrastructure/SoloLife.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/SoloLife.UnitTests/SoloLife.UnitTests.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,12 @@
+**/bin/
+**/obj/
+.vs/
+.vs/**
+**/.vs/
+**/.vscode/
+.git/
+.github/
+.sil/
+docs/
+tests/
+*.user

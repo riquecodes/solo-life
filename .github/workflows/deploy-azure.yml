@@ -1,0 +1,74 @@
+name: deploy-azure
+
+# Esteira: push na main -> testa -> builda imagem NO RUNNER -> push no ACR -> cria/atualiza o Container App.
+# ACR Tasks (az acr build) e bloqueado na sub Azure for Students, por isso o build roda no runner.
+#
+# Config necessaria no repo (Settings -> Secrets and variables -> Actions):
+#   secret  AZURE_CREDENTIALS : JSON do "az ad sp create-for-rbac --json-auth"
+#   secret  DB_CONN           : connection string do Neon (endpoint -pooler)
+#   secret  JWT_SECRET        : segredo do JWT (openssl rand -base64 48 ou equivalente)
+#   var     ACR_NAME          : nome do Azure Container Registry (ex.: acrsololife2093)
+#
+# Bootstrap (uma vez, local): az containerapp env create -g rg-sololife -n sololife-env -l eastus2
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  RESOURCE_GROUP: rg-sololife
+  CONTAINERAPP: sololife-api
+  ENVIRONMENT: sololife-env
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Restore + Test
+        run: dotnet test SoloLife.slnx -c Release
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: ACR login
+        run: az acr login -n ${{ vars.ACR_NAME }}
+
+      - name: Build + push da imagem (no runner)
+        run: |
+          IMAGE=${{ vars.ACR_NAME }}.azurecr.io/sololife-api:${{ github.sha }}
+          docker build -t "$IMAGE" .
+          docker push "$IMAGE"
+
+      - name: Cria ou atualiza o Container App
+        run: |
+          az containerapp up \
+            -g "$RESOURCE_GROUP" -n "$CONTAINERAPP" \
+            --environment "$ENVIRONMENT" \
+            --image ${{ vars.ACR_NAME }}.azurecr.io/sololife-api:${{ github.sha }} \
+            --ingress external --target-port 8080
+
+      - name: Aplica secrets + env vars (idempotente)
+        run: |
+          az containerapp secret set -g "$RESOURCE_GROUP" -n "$CONTAINERAPP" \
+            --secrets db-conn="${{ secrets.DB_CONN }}" jwt-secret="${{ secrets.JWT_SECRET }}"
+          az containerapp update -g "$RESOURCE_GROUP" -n "$CONTAINERAPP" \
+            --set-env-vars \
+              ASPNETCORE_ENVIRONMENT=Production \
+              "ConnectionStrings__Default=secretref:db-conn" \
+              "Jwt__Secret=secretref:jwt-secret" \
+              Jwt__Issuer=SoloLife \
+              Jwt__Audience=SoloLifeApp \
+            --min-replicas 0 --max-replicas 2
