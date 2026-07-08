@@ -22,7 +22,7 @@ Application=`Result<T>`, Infra=`InfraResult`, Api=`IActionResult`. Não vazar ti
 
 ## Banco / Migrations
 - Sem migrations EF. Schema manual em `.migrations/V{NNN}__{desc}.sql`, sequencial 3 dígitos, cada uma em `BEGIN; ... COMMIT;`.
-- Identificadores **`"PascalCase"` quoteados** (casam com mapeamento por convenção do EF — não há `IEntityTypeConfiguration`). Enums = `integer`; arrays = `text[]`.
+- Identificadores **`snake_case` minúsculo (sem aspas)** — casam com o mapeamento do EF via `UseSnakeCaseNamingConvention()` (não há `IEntityTypeConfiguration`). Enums = `integer`; arrays = `text[]`.
 - Aplicar: `psql "...sololife..." -f .migrations/VNNN__....sql`.
 
 ## Regras de gamificação (MVP, fonte: docs/backend-claude.md)

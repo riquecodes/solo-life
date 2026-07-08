@@ -225,4 +225,3 @@ Jwt__Audience=SoloLifeApp
 - **`docker-compose` para distribuição:** para outros rodarem 100% local sem instalar nada, um `docker-compose.yml` com `postgres:18` + `.migrations/` montado em `/docker-entrypoint-initdb.d/`. (Mecanismo roda só na 1ª subida do volume.)
 - **Painel desktop `.exe` (.NET):** mission control próprio (Coolify API + `pg_stat_*` + Seq) — **adiado para depois do MVP**.
 - **Escala/HA:** uma VM = ponto único de falha. Para lançamento sério, considerar VM maior, réplica de leitura, ou migrar o banco para gerenciado (Neon/Aiven free já são PG18).
-```
